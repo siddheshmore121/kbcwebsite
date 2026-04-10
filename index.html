@@ -70,8 +70,8 @@
     <div id="group-select" class="hidden">
         <h2 style="color: #ffd700;">तुमचा गट निवडा</h2>
         <div class="grid-container">
-            <button class="btn-choice" onclick="selectGroup('chota')">१. छोटा गट<br>(इ. १ ली ते ४ थी)</button>
-            <button class="btn-choice" onclick="selectGroup('medium')">२. मध्यम गट<br>(इ. ५ वी ते ८ वी)</button>
+            <button class="btn-choice" onclick="selectGroup('chota')">१. लहान गट<br>(इ. ४ थी ते ७ वी)</button>
+            <button class="btn-choice" onclick="selectGroup('medium')">२. मध्यम गट<br>(इ. ८ वी ते १० वी)</button>
             <button class="btn-choice" onclick="selectGroup('open')">३. ओपन गट<br>(सर्व वयोगट)</button>
         </div>
     </div>
@@ -105,42 +105,31 @@
 
         audioTimer.loop = true;
 
+        const commonQuestions = [
+            { q: "बाबासाहेबांचा जन्म कधी झाला?", opt: ["१४ एप्रिल १८९१", "१५ ऑगस्ट १९४७", "२६ जानेवारी १९५०", "२ ऑक्टोबर १८६९"], ans: 0 },
+            { q: "भारताचे राष्ट्रगीत कोणते?", opt: ["वंदे मातरम", "जन गण मन", "सारे जहाँ से अच्छा", "जय हिंद"], ans: 1 },
+            { q: "छत्रपती शिवाजी महाराज यांचे वडील कोण?", opt: ["संभाजी", "शहाजीराजे", "मालोजी", "तानाजी"], ans: 1 },
+            { q: "बाबासाहेबांची आई कोण?", opt: ["जिजाबाई", "रमाबाई", "भीमाबाई", "लक्ष्मीबाई"], ans: 2 },
+            { q: "भारतीय संविधान तयार करण्यासाठी किती कालावधी लागला?", opt: ["१ वर्ष", "२ वर्ष", "३ वर्ष", "२ वर्षे ११ महिने १८ दिवस"], ans: 3 },
+            { q: "सावित्रीबाई फुले यांनी काय सुरू केले?", opt: ["मंदिर", "बँक", "शाळा", "कारखाना"], ans: 2 },
+            { q: "बाबासाहेबांनी कोणते वृत्तपत्र सुरू केले?", opt: ["सामना", "बहिष्कृत भारत", "लोकमत", "केसरी"], ans: 1 },
+            { q: "बाबासाहेबांचे निधन कुठे झाले?", opt: ["मुंबई", "नागपूर", "पुणे", "दिल्ली"], ans: 3 },
+            { q: "संविधानावर स्वाक्षरी किती सदस्यांनी केली?", opt: ["२००", "३००", "२८४", "१५०"], ans: 2 },
+            { q: "बाबासाहेबांचे घोषवाक्य काय?", opt: ["जय हिंद", "शिका, संघटित व्हा, संघर्ष करा", "वंदे मातरम", "सत्यमेव जयते"], ans: 1 }
+        ];
+
         const gameData = {
             chota: {
-                title: "छोटा गट (Junior)",
-                files: [
-                    { 
-                        name: "सामान्य ज्ञान (जी.के.)", 
-                        questions: [
-                            { q: "बाबासाहेबांचा जन्म कधी झाला?", opt: ["१४ एप्रिल", "१५ ऑगस्ट", "२६ जानेवारी", "२ ऑक्टोबर"], ans: 0 },
-                            { q: "भारताचे राष्ट्रगीत कोणते?", opt: ["वंदे मातरम", "जन गण मन", "सारे जहाँ से अच्छा", "जय हिंद"], ans: 1 },
-                            { q: "छत्रपती शिवाजी महाराज यांचे वडील कोण?", opt: ["संभाजी", "शहाजीराजे", "मालोजी", "तानाजी"], ans: 1 },
-                            { q: "बाबासाहेबांची आई कोण?", opt: ["जिजाबाई", "रमाबाई", "भीमाबाई", "लक्ष्मीबाई"], ans: 2 },
-                            { q: "संविधानातील भाग ३ मध्ये काय आहे?", opt: ["कर्तव्य", "हक्क", "न्यायालय", "कर"], ans: 1 },
-                            { q: "सावित्रीबाई फुले यांनी काय सुरू केले?", opt: ["मंदिर", "बँक", "शाळा", "कारखाना"], ans: 2 },
-                            { q: "बाबासाहेबांनी कोणते वृत्तपत्र सुरू केले?", opt: ["सामना", "बहिष्कृत भारत", "लोकमत", "केसरी"], ans: 1 },
-                            { q: "बाबासाहेबांचे निधन कुठे झाले?", opt: ["मुंबई", "नागपूर", "पुणे", "दिल्ली"], ans: 3 },
-                            { q: "संविधानावर स्वाक्षरी किती सदस्यांनी केली?", opt: ["२००", "३००", "२८४", "१५०"], ans: 2 },
-                            { q: "बाबासाहेबांचे घोषवाक्य काय?", opt: ["जय हिंद", "शिका, संघटित व्हा, संघर्ष करा", "वंदे मातरम", "सत्यमेव जयते"], ans: 1 }
-                        ]
-                    }
-                ]
+                title: "लहान गट (इ. ४ थी ते ७ वी)",
+                files: [{ name: "सामान्य ज्ञान १", questions: commonQuestions }]
             },
             medium: {
-                title: "मध्यम गट (Middle)",
-                files: [
-                    { name: "इतिहास", questions: [
-                        { q: "स्वराज्य स्थापनेची शपथ शिवरायांनी कोठे घेतली?", opt: ["प्रतापगड", "रायगड", "रायरेश्वर", "तोरणा"], ans: 2 }
-                    ]}
-                ]
+                title: "मध्यम गट (इ. ८ वी ते १० वी)",
+                files: [{ name: "इतिहास व संविधान १", questions: commonQuestions }]
             },
             open: {
-                title: "ओपन गट (Open)",
-                files: [
-                    { name: "भारतीय संविधान", questions: [
-                        { q: "संविधान दिन कधी साजरा केला जातो?", opt: ["१५ ऑगस्ट", "२६ जानेवारी", "२६ नोव्हेंबर", "१४ एप्रिल"], ans: 2 }
-                    ]}
-                ]
+                title: "ओपन गट (सर्व वयोगट)",
+                files: [{ name: "सर्वंकष ज्ञान १", questions: commonQuestions }]
             }
         };
 
@@ -151,14 +140,12 @@
 
         function stopAllAudio() {
             [audioIntro, audioTimer, audioLock, audioCorrect, audioWrong].forEach(a => {
-                a.pause();
-                a.currentTime = 0;
+                a.pause(); a.currentTime = 0;
             });
         }
 
         function showGroups() {
-            stopAllAudio();
-            hideAll();
+            stopAllAudio(); hideAll();
             document.getElementById("group-select").classList.remove("hidden");
         }
 
@@ -184,13 +171,11 @@
             hideAll();
             document.getElementById("quiz-ready").classList.remove("hidden");
             document.getElementById("ready-info").innerText = `विषय: ${file.name}\nएकूण प्रश्न: ${currentQList.length}`;
-            stopAllAudio();
-            audioIntro.play();
+            stopAllAudio(); audioIntro.play();
         }
 
         function actualStartGame() {
-            stopAllAudio();
-            hideAll();
+            stopAllAudio(); hideAll();
             document.getElementById("game").classList.remove("hidden");
             loadQuestion();
         }
@@ -211,8 +196,7 @@
             });
             document.getElementById("options").innerHTML = html;
             
-            audioTimer.play();
-            startTimer();
+            audioTimer.play(); startTimer();
         }
 
         function startTimer() {
@@ -221,28 +205,19 @@
                 timeLeft--;
                 document.getElementById("timer").innerText = timeLeft;
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    stopAllAudio();
-                    audioWrong.play();
-                    alert("वेळ संपली!");
-                    showGroups();
+                    clearInterval(timer); stopAllAudio();
+                    audioWrong.play(); alert("वेळ संपली!"); showGroups();
                 }
             }, 1000);
         }
 
         function handleLock(i, el) {
-            clearInterval(timer);
-            stopAllAudio();
+            clearInterval(timer); stopAllAudio();
             audioLock.play();
-
             const opts = document.querySelectorAll(".option");
             opts.forEach(opt => opt.style.pointerEvents = "none");
-            
             el.classList.add("locked");
-
-            setTimeout(() => {
-                checkAnswer(i, el);
-            }, 2000);
+            setTimeout(() => checkAnswer(i, el), 2000);
         }
 
         function checkAnswer(i, el) {
@@ -258,22 +233,14 @@
                 el.classList.add("wrong");
                 opts[correct].classList.add("correct");
                 audioWrong.play();
-                setTimeout(() => {
-                    alert("चुकीचे उत्तर! पुन्हा प्रयत्न करा.");
-                    showGroups();
-                }, 2000);
+                setTimeout(() => { alert("चुकीचे उत्तर! पुन्हा प्रयत्न करा."); showGroups(); }, 2000);
             }
         }
 
         function nextQ() {
             index++;
-            if (index < currentQList.length) {
-                loadQuestion();
-            } else {
-                stopAllAudio();
-                alert("अभिनंदन! तुम्ही ही फाईल पूर्ण केली आहे.");
-                showGroups();
-            }
+            if (index < currentQList.length) { loadQuestion(); } 
+            else { stopAllAudio(); alert("अभिनंदन! तुम्ही ही स्पर्धा पूर्ण केली आहे."); showGroups(); }
         }
 
         function hideAll() {
