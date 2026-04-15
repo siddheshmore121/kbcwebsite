@@ -22,23 +22,15 @@
         .kbc-logo { width: 100px; margin-bottom: 10px; filter: drop-shadow(0 0 10px #ffd700); }
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; width: 100%; }
         
-        /* Lifelines */
         .lifeline-container { display: flex; gap: 15px; margin-bottom: 20px; }
         .lifeline {
-            width: 65px; height: 45px; border: 2px solid #ffd700; border-radius: 25px;
+            width: 80px; height: 50px; border: 2px solid #ffd700; border-radius: 25px;
             background: rgba(255, 215, 0, 0.1); cursor: pointer; display: flex;
-            justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
-            transition: 0.3s;
+            justify-content: center; align-items: center; font-weight: bold; font-size: 16px;
+            transition: 0.3s; color: #ffd700;
         }
         .lifeline:hover { background: #ffd700; color: #000; }
-        .lifeline.used { opacity: 0.3; pointer-events: none; background: #555; border-color: #888; }
-
-        /* Suggestion Box for Lifelines */
-        #suggestion-box {
-            width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 15px;
-            background: rgba(255, 255, 255, 0.1); border: 1px dashed #ffd700;
-            font-weight: bold; color: #00ff00; display: none;
-        }
+        .lifeline.used { opacity: 0.3; pointer-events: none; background: #555 !important; border-color: #888; color: #fff; }
 
         .btn-choice {
             padding: 15px; border-radius: 15px; border: 2px solid #ffd700;
@@ -109,11 +101,8 @@
         <div class="lifeline-container">
             <div class="lifeline" id="l-5050" onclick="useLifeline('5050')">50:50</div>
             <div class="lifeline" id="l-poll" onclick="useLifeline('poll')">👥 Poll</div>
-            <div class="lifeline" id="l-expert" onclick="useLifeline('expert')">🎓 Expert</div>
         </div>
         
-        <div id="suggestion-box"></div>
-
         <div class="q-counter" id="question-number">प्रश्न: ०/०</div>
         <div id="timer-container"><span id="timer">45</span></div>
         <div class="question-box" id="question">प्रश्न लोड होत आहे...</div>
@@ -131,19 +120,76 @@
         const audioWrong = new Audio('wrong.mp3');
         audioTimer.loop = true;
 
-        const commonQuestions = [
-            { q: "बाबासाहेबांचा जन्म कधी झाला?", opt: ["१४ एप्रिल १८९१", "१५ ऑगस्ट १९४७", "२६ जानेवारी १९५०", "२ ऑक्टोबर १८६९"], ans: 0 },
+        const q_lahan_1 = [
+            { q: "डॉ. बाबासाहेब आंबेडकर यांचा जन्म कधी झाला?", opt: ["१४ एप्रिल १८९१", "१५ ऑगस्ट १९४७", "२६ जानेवारी १९५०", "२ ऑक्टोबर १८६९"], ans: 0 },
             { q: "भारताचे राष्ट्रगीत कोणते?", opt: ["वंदे मातरम", "जन गण मन", "सारे जहाँ से अच्छा", "जय हिंद"], ans: 1 },
             { q: "छत्रपती शिवाजी महाराज यांचे वडील कोण?", opt: ["संभाजी", "शहाजीराजे", "मालोजी", "तानाजी"], ans: 1 },
-            { q: "बाबासाहेबांची आई कोण?", opt: ["जिजाबाई", "रमाबाई", "भीमाबाई", "लक्ष्मीबाई"], ans: 2 },
-            { q: "भारतीय संविधान तयार करण्यासाठी किती कालावधी लागला?", opt: ["१ वर्ष", "२ वर्ष", "३ वर्ष", "२ वर्षे ११ महिने १८ दिवस"], ans: 3 }
+            { q: "डॉ. बाबासाहेब आंबेडकरांच्या आई कोण?", opt: ["जिजाबाई", "रमाबाई", "भीमाबाई", "लक्ष्मीबाई"], ans: 2 },
+            { q: "भारतीय संविधान तयार करण्यासाठी किती कालावधी लागला?", opt: ["१ वर्ष", "२ वर्ष", "३ वर्ष", "२ वर्षे ११ महिने १८ दिवस"], ans: 3 },
+            { q: "सावित्रीबाई फुले यांना कोणत्या नावाने ओळखले जाते?", opt: ["आधुनिक भारताच्या पहिल्या महिला शिक्षिका", "झाशीची राणी", "क्रांती माता", "लोकमाता"], ans: 0 },
+            { q: "बाबासाहेबांनी कोणते वृत्तपत्र सुरू केले?", opt: ["सामना", "बहीष्कृत भारत", "लोकमत", "केसरी"], ans: 1 },
+            { q: "बाबासाहेबांचे निधन कुठे झाले?", opt: ["मुंबई", "नागपूर", "पुणे", "दिल्ली"], ans: 3 },
+            { q: "बाबासाहेबांचे घोषवाक्य काय?", opt: ["जय हिंद", "शिका, संघटित व्हा, संघर्ष करा", "वंदे मातरम", "सत्यमेव जयते"], ans: 1 }
+        ];
+
+        const q_lahan_2 = [
+            { q: "गौतम बुद्धांचे पूर्ण नाव काय?", opt: ["अशोक गौतम", "सिद्धार्थ गौतम", "महावीर गौतम", "चंद्रगुप्त गौतम"], ans: 1 },
+            { q: "शाहू महाराजांनी शिक्षणासाठी काय केले?", opt: ["शाळा बंद केल्या", "मोफत शिक्षण दिले", "कर वाढवला", "शिक्षणावर बंदी घातली"], ans: 1 },
+            { q: "महात्मा जोतिराव फुले यांचे मूळ गाव कोणते?", opt: ["पुणे", "सातारा", "काठगाव", "कटगुण"], ans: 3 },
+            { q: "भारताचे पहिले कायदा मंत्री कोण होते?", opt: ["जवाहरलाल नेहरू", "सरदार पटेल", "डॉ. बाबासाहेब आंबेडकर", "राजेंद्र प्रसाद"], ans: 2 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांना परदेशात शिक्षणासाठी कोणी मदत केली?", opt: ["महात्मा गांधी", "शाहू महाराज", "नेहरू", "टिळक"], ans: 1 },
+            { q: "शाहू महाराजांनी कोल्हापुरात कोणती प्रथा बंद केली?", opt: ["बालविवाह", "सती प्रथा", "जातीय भेदभावावरील प्रथा", "शिक्षण प्रथा"], ans: 2 },
+            { q: "महाड सत्याग्रह कशासाठी होता?", opt: ["जमीन हक्कासाठी", "पाण्याच्या हक्कासाठी", "शिक्षणासाठी", "मतदानासाठी"], ans: 1 },
+            { q: "बाबासाहेबांचे मूळ गाव कोणते?", opt: ["महू", "आंबवडे (रत्नागिरी)", "नागपूर", "मुंबई"], ans: 1 },
+            { q: "बाबासाहेबांनी कोणत्या विषयात उच्च शिक्षण घेतले?", opt: ["विज्ञान", "कला", "कायदा व अर्थशास्त्र", "अभियांत्रिकी"], ans: 2 },
+            { q: "“गड आला पण सिंह गेला” हे वाक्य कोणी म्हटले?", opt: ["तानाजी मालुसरे", "उदयभान", "जिजाबाई", "शिवाजी महाराज"], ans: 3 }
+        ];
+
+        const q_lahan_3 = [
+            { q: "देशाचा प्रथम नागरिक कोण असतो?", opt: ["पंतप्रधान", "राष्ट्रपती", "मुख्यमंत्री", "राज्यपाल"], ans: 1 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांना कोणत्या नावाने ओळखले जाते?", opt: ["लोकमान्य टिळक", "राजर्षी शाहू महाराज", "राज्यघटनेचे शिल्पकार", "महात्मा गांधी"], ans: 2 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांच्या पत्नीचे नाव काय?", opt: ["सावित्रीबाई", "रमाबाई", "कस्तुरबा", "लक्ष्मीबाई"], ans: 1 },
+            { q: "राजर्षी शाहू महाराजांचे मूळ नाव काय होते?", opt: ["संभाजी", "शिवाजी", "यशवंतराव घाटगे", "माधवराव"], ans: 2 },
+            { q: "महात्मा ज्योतिराव फुले यांनी पहिली मुलींची शाळा कुठे सुरू केली?", opt: ["मुंबई", "नागपूर", "पुणे (भिडे वाडा)", "नाशिक"], ans: 2 },
+            { q: "भारतीय राज्यघटना कधी स्वीकारण्यात आली?", opt: ["15 ऑगस्ट 1947", "26 जानेवारी 1950", "26 नोव्हेंबर 1949", "2 ऑक्टोबर 1950"], ans: 2 },
+            { q: "छत्रपती शिवाजी महाराजांनी 16 व्या वर्षी कोणता पहिला किल्ला जिंकला?", opt: ["राजगड", "तोरणा", "सिंहगड", "प्रतापगड"], ans: 1 },
+            { q: "चवदार तळे कोठे आहे?", opt: ["पुणे", "मुंबई", "महाड", "कोल्हापूर"], ans: 2 },
+            { q: "गौतम बुद्ध यांचे जन्मस्थान कोणते?", opt: ["बोधगया", "सारनाथ", "लुंबिनी", "कुशीनगर"], ans: 2 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांचे स्मारक कोठे आहे?", opt: ["दिल्ली", "मुंबई (दादर)", "नागपूर", "पुणे"], ans: 1 }
+        ];
+
+        const q_lahan_4 = [
+            { q: "डॉ. बाबासाहेब आंबेडकरांचा जन्म कोठे झाला?", opt: ["मुंबई", "नागपूर", "महू", "पुणे"], ans: 2 },
+            { q: "डॉ. आंबेडकर हे त्यांच्या आई-वडिलांचे कितवे अपत्य होते?", opt: ["10वे", "12वे", "14वे", "16वे"], ans: 2 },
+            { q: "स्वतंत्र भारताचे पहिले पंतप्रधान कोण होते?", opt: ["महात्मा गांधी", "पंडित जवाहरलाल नेहरू", "सरदार पटेल", "राजेंद्र प्रसाद"], ans: 1 },
+            { q: "भारतीय संविधान दिन कधी साजरा केला जातो?", opt: ["15 ऑगस्ट", "26 जानेवारी", "2 ऑक्टोबर", "26 नोव्हेंबर"], ans: 3 },
+            { q: "रामजी आंबेडकर यांचे मूळ गाव कोणते?", opt: ["नागपूर", "दापोली", "पुणे", "कोल्हापूर"], ans: 1 },
+            { q: "बौद्ध धर्माचा प्रसार कोणी केला?", opt: ["महावीर", "अशोक सम्राट", "अकबर", "शिवाजी महाराज"], ans: 1 },
+            { q: "शाहू महाराज कोणत्या संस्थानाचे राजे होते?", opt: ["सातारा", "कोल्हापूर", "पुणे", "नागपूर"], ans: 1 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांना शिक्षण हे _______ आहे असे वाटत होते.", opt: ["अधिकार", "शस्त्र", "वाघिणीचे दूध", "कर्तव्य"], ans: 2 },
+            { q: "डॉ. बाबासाहेब आंबेडकरांनी बहुजन समाजाला कोणता नारा दिला?", opt: ["जय हिंद", "शिक्षण घ्या, संघटित व्हा, संघर्ष करा", "वंदे मातरम्", "सत्य मेव जयते"], ans: 1 },
+            { q: "भारतात कायदे कोण बनवते?", opt: ["न्यायालय", "संसद", "राष्ट्रपती", "पंतप्रधान"], ans: 1 }
+        ];
+
+        // लहान गट - फाईल ५ (नवीन प्रश्न)
+        const q_lahan_5 = [
+            { q: "शाहू महाराजांनी शिक्षणासाठी काय केले?", opt: ["शाळा बंद केल्या", "मोफत शिक्षण दिले", "कर वाढवला", "शिक्षणावर बंदी घातली"], ans: 1 },
+            { q: "महात्मा जोतिराव फुले यांचे मूळ गाव कोणते?", opt: ["पुणे", "सातारा", "काठगाव", "कटगुण (सातारा)"], ans: 3 },
+            { q: "भारताचे पहिले कायदा मंत्री कोण होते?", opt: ["जवाहरलाल नेहरू", "सरदार पटेल", "डॉ. बाबासाहेब आंबेडकर", "राजेंद्र प्रसाद"], ans: 2 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांना परदेशात शिक्षणासाठी कोणी मदत केली?", opt: ["महात्मा गांधी", "शाहू महाराज", "नेहरू", "टिळक"], ans: 1 },
+            { q: "शाहू महाराजांनी कोल्हापुरात कोणती प्रथा बंद केली?", opt: ["बालविवाह", "सती प्रथा", "जातीय भेदभावावरील प्रथा", "शिक्षण प्रथा"], ans: 2 },
+            { q: "महाड सत्याग्रह कशासाठी होता?", opt: ["जमीन हक्कासाठी", "पाण्याच्या हक्कासाठी", "शिक्षणासाठी", "मतदानासाठी"], ans: 1 },
+            { q: "बाबासाहेबांचे मूळ गाव कोणते?", opt: ["महू", "आंबवडे (रत्नागिरी)", "नागपूर", "मुंबई"], ans: 1 },
+            { q: "बाबासाहेबांनी कोणत्या विषयात उच्च शिक्षण घेतले?", opt: ["विज्ञान", "कला", "कायदा व अर्थशास्त्र", "अभियांत्रिकी"], ans: 2 },
+            { q: "“गड आला पण सिंह गेला” हे वाक्य कोणी म्हटले?", opt: ["शिवाजी महाराज", "तानाजी मालुसरे", "उदयभान", "शिवाजी महाराजांनी (तानाजींच्या मृत्यूनंतर)"], ans: 3 },
+            { q: "डॉ. बाबासाहेब आंबेडकर यांचे पूर्ण नाव काय?", opt: ["भीमराव रामजी आंबेडकर", "बाबासाहेब आंबेडकर", "भीमराव आंबेडकर", "रामजी भीमराव आंबेडकर"], ans: 0 }
         ];
 
         let currentQList = [];
         let index = 0;
         let timer;
         let timeLeft = 45;
-        let lifelinesUsed = { '5050': false, 'poll': false, 'expert': false };
+        let lifelinesUsed = { '5050': false, 'poll': false };
 
         function stopAllAudio() {
             [audioIntro, audioTimer, audioLock, audioCorrect, audioWrong].forEach(a => { a.pause(); a.currentTime = 0; });
@@ -155,7 +201,7 @@
         }
 
         function selectGroup(groupKey) {
-            const group = gameData[groupKey] || { title: "गट", files: [{ name: "सामान्य ज्ञान", questions: commonQuestions }] };
+            const group = gameData[groupKey];
             document.getElementById("level-title").innerText = group.title;
             const container = document.getElementById("level-buttons");
             container.innerHTML = "";
@@ -173,7 +219,7 @@
         function prepareQuiz(file) {
             currentQList = file.questions;
             index = 0;
-            lifelinesUsed = { '5050': false, 'poll': false, 'expert': false };
+            lifelinesUsed = { '5050': false, 'poll': false };
             updateLifelineUI();
             hideAll();
             document.getElementById("quiz-ready").classList.remove("hidden");
@@ -195,7 +241,6 @@
             document.getElementById("timer-container").style.visibility = "hidden";
             document.getElementById("nextBtn").classList.add("hidden");
             document.getElementById("showOptionsBtn").classList.remove("hidden");
-            document.getElementById("suggestion-box").style.display = "none";
             document.getElementById("question-number").innerText = `प्रश्न: ${index + 1} / ${currentQList.length}`;
             
             let q = currentQList[index];
@@ -257,8 +302,6 @@
             if (lifelinesUsed[type]) return;
             const q = currentQList[index];
             const correctIdx = q.ans;
-            const correctAns = q.opt[correctIdx];
-            const suggestBox = document.getElementById("suggestion-box");
 
             if (type === '5050') {
                 lifelinesUsed[type] = true;
@@ -273,20 +316,11 @@
             } else if (type === 'poll') {
                 lifelinesUsed[type] = true;
                 document.getElementById(`l-${type}`).classList.add("used");
-                suggestBox.style.display = "block";
-                // बरोबर उत्तराला ७०-९०% दरम्यान रँडम व्हॅल्यू देणे
-                let pollVal = Math.floor(Math.random() * 21) + 70;
-                suggestBox.innerHTML = `📊 Audience Poll: पर्याय "${correctAns}" कडे ${pollVal}% कल आहे.`;
-            } else if (type === 'expert') {
-                lifelinesUsed[type] = true;
-                document.getElementById(`l-${type}`).classList.add("used");
-                suggestBox.style.display = "block";
-                suggestBox.innerHTML = `🎓 Expert Advice: माझ्या मते याचे उत्तर "${correctAns}" असायला हवे.`;
             }
         }
 
         function updateLifelineUI() {
-            ['5050', 'poll', 'expert'].forEach(t => {
+            ['5050', 'poll'].forEach(t => {
                 const el = document.getElementById(`l-${t}`);
                 if(el) el.classList.remove("used");
             });
@@ -305,9 +339,28 @@
         }
 
         const gameData = {
-            chota: { title: "लहान गट", files: [{ name: "सामान्य ज्ञान १", questions: commonQuestions }] },
-            medium: { title: "मध्यम गट", files: [{ name: "इतिहास १", questions: commonQuestions }] },
-            open: { title: "ओपन गट", files: [{ name: "सर्वंकष ज्ञान १", questions: commonQuestions }] }
+            chota: { 
+                title: "लहान गट", 
+                files: [
+                    { name: "भीम ज्ञान फाईल १", questions: q_lahan_1 },
+                    { name: "भीम ज्ञान फाईल २", questions: q_lahan_2 },
+                    { name: "भीम ज्ञान फाईल ३", questions: q_lahan_3 },
+                    { name: "भीम ज्ञान फाईल ४", questions: q_lahan_4 },
+                    { name: "भीम ज्ञान फाईल ५", questions: q_lahan_5 }
+                ] 
+            },
+            medium: { 
+                title: "मध्यम गट", 
+                files: [
+                    { name: "इतिहास १", questions: q_lahan_1 }
+                ] 
+            },
+            open: { 
+                title: "ओपन गट", 
+                files: [
+                    { name: "सर्वंकष ज्ञान १", questions: q_lahan_1 }
+                ] 
+            }
         };
     </script>
 </body>
